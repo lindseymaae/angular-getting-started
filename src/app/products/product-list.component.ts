@@ -12,7 +12,16 @@ pageTitle: string = 'Product List';
 imageWidth: number = 50;
 imageMargin: number = 2;
 showImage: boolean = false;
-listFilter: string = 'cart'
+_listFilter: string;
+get listFilter(): string {
+    return this._listFilter;
+}
+set listFilter(value:string){
+    this._listFilter = value;
+    this.filteredProduts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
+}
+
+filteredProduts: IProduct[];
 products: IProduct[] = [
     {
                 "productId": 1,
@@ -36,6 +45,18 @@ products: IProduct[] = [
               },
         
 ];
+
+performFilter(filterBy: string): IProduct[]{
+    filterBy.toLocaleLowerCase();
+    return this.products.filter((product: IProduct) =>
+        product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1)
+}
+
+onRatingClicked(message: string): void {
+    this.pageTitle = 'Product List: ' + message;
+    console.log(this.pageTitle);
+    
+  }
 
 toggleImage(): void{
     this.showImage = !this.showImage;
